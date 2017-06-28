@@ -1,4 +1,4 @@
-# [Awards Leaderboard]
+# Awards Leaderboard
 [BADGES:]
 [Bower version]
 [NPM version]
