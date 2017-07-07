@@ -14,5 +14,5 @@ module.exports = {
     ltiSecret: process.env.LTI_SECRET,
     state: process.env.STATE,
     tokenEndpoint: process.env.TOKEN_ENDPOINT,
-    configuredPort: process.env.HTTPS_PORT
+    configuredPort: process.env.PORT
 };

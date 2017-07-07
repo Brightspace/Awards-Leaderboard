@@ -125,11 +125,13 @@
                 },
 
                 _leaderboardRetrieved: function(event) {
-                    for (var i = 0; i < event.detail.results.length; i++) {
-                        if (event.detail.results[i].UserId == this.myRanking.UserId) {
-                            continue;
+                    if (event.detail.results) {
+                        for (var i = 0; i < event.detail.results.length; i++) {
+                            if (event.detail.results[i].UserId == this.myRanking.UserId) {
+                                continue;
+                            }
+                            this.push('leaderboardItems', event.detail.results[i]);
                         }
-                        this.push('leaderboardItems', event.detail.results[i]);
                     }
                     this.loading = false;
                     this.loadingNext = false;
@@ -138,7 +140,6 @@
 
                 _myRankingRetrieved: function(event) {
                     this.myRanking = event.detail.ranking;
-                    console.log(this.myRanking);
                     this.$.leaderboardService.getLeaderboard();
                 },
 
