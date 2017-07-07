@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="leaderboard-service">
+	<template>
+		 <style>
+			:host {
+				display: none;
+			}
+		</style>
+
+		<iron-ajax
+			id="leaderboardRequest"
+			handle-as="json"
+			method="GET"
+			on-response="_response"
+			on-error="_error">
+		</iron-ajax>
+		<iron-ajax
+			id="myRankingRequest"
+			handle-as="json"
+			method="GET"
+			on-response="_myRankingResponse"
+			on-error="_myRankingError">
+		</iron-ajax>
+	</template>
+
+	<script>
+		Polymer({
+			is: 'leaderboard-service',
+
+			_error: function(error) {
+				var message = error.detail.message;
+				this.fire('leaderboardError', { errorMessage: message } );
+			},
+
+			_response: function(e, d) {
+				this.fire('leaderboardRetrieved', { results: d.response.Objects, next: d.response.Next } );
+			},
+
+			getLeaderboard: function(sortField, nextUrl) {
+				var baseUrl = new Polymer.IronMetaQuery({ key: 'host'}).value;
+				var path = '/leaderboard';
+				var params = {};
+				if (sortField) {
+					params.sortField = sortField;
+				}
+				if (nextUrl) {
+					params.nextUrl = nextUrl;
+				}
+				this.$.leaderboardRequest.params = params;
+				this.$.leaderboardRequest.url = baseUrl + path;
+				this.$.leaderboardRequest.generateRequest();
+			},
+
+			_myRankingError: function(error) {
+				var message = error.detail.message;
+				this.fire('myRankingError', { errorMessage: message } );
+			},
+
+			_myRankingResponse: function(e, d) {
+				this.fire('myRankingRetrieved', { ranking: d.response } );
+			},
+
+			getMyRanking: function() {
+				var baseUrl = new Polymer.IronMetaQuery({ key: 'host'}).value;
+				var path = '/myranking';
+				var params = {};
+				this.$.myRankingRequest.params = params;
+				this.$.myRankingRequest.url = baseUrl + path;
+				this.$.myRankingRequest.generateRequest();
+			}
+		});
+	</script>
+</dom-module>

@@ -1,0 +1,149 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/d2l-icons/tier1-icons.html">
+<link rel="import" href="../../bower_components/d2l-button/d2l-button.html">
+<link rel="import" href="../../bower_components/d2l-loading-spinner/d2l-loading-spinner.html">
+
+<dom-module id="leaderboard-item">
+
+	<template>
+		<style>
+            .awardImage {
+                max-width: 40px;
+            }
+            .trophyIcon {
+                width: 30px;
+                height: 30px;
+            }
+            .gold {
+                color: #CFB53B;
+            }
+            .silver {
+                color: #C0C0C0;
+            }
+            .bronze {
+                color: #cd7f32;
+            }
+            .displayNone {
+                display: none;
+            }
+            .displayFlex {
+                padding: 0rem;
+                margin: 1rem;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+            .profile {
+                text-align: center;
+                max-width: 150px;
+                width: 100%;
+            }
+            .profileImage {
+                max-width: 40px;
+            }
+            .userDisplayName {
+                margin: 0;
+            }
+            .rankingText {
+                font-size: 1.8rem;
+            }
+            .marginRight {
+                margin-right: 20px;
+            }
+            .ranking {
+                max-width: 75px;
+                width: 100%;
+                text-align: center;
+            }
+            paper-card {
+                width: 100%;
+            }
+            :host[me] paper-card {
+                background-color: #00849C;
+                box-shadow: 0 0 0 0;
+            }
+		</style>
+
+        <paper-card>
+            <div class="displayFlex card-content">
+                <div class="marginRight ranking">
+                    <span hidden$="[[_hideRank(item.Rank)]]" class="rankingText"><sup>#</sup>[[item.Rank]]</span>
+                    <iron-icon hidden$="[[!_hideRank(item.Rank)]]" icon="d2l-tier1:awards" class$="[[_getIconClass(item.Rank)]] trophyIcon"></iron-icon>
+                </div>
+                <div class="marginRight profile">
+                    <template is="dom-if" if="[[!me]]">
+                        <img class="profileImage" src$="[[_getProfileImageUrl(item.ProfileImage)]]" alt$="[[item.DisplayName]]" title$="[[item.DisplayName]]">
+                        <h3 class="userDisplayName">[[item.DisplayName]]</h3>
+                    </template>
+                    <template is="dom-if" if="[[me]]">
+                        <h2 class="userDisplayName">Me</h2>
+                    </template>
+                </div>
+                <div class="awardsList">
+                    <template is="dom-repeat" items="[[item.IssuedAwards.Objects]]" as="award">
+                        <img class="awardImage" src$="[[award.Award.ImageData.Path]]" alt$="[[award.Award.Title]]" title$="[[award.Award.Title]]">
+                    </template>
+                </div>
+            </div>
+        </paper-card>
+	</template>
+
+	<script>
+        Polymer({
+            is: 'leaderboard-item',
+            
+            properties: {
+                item: {
+                    type: Object,
+                    value: function() { return {}; }
+                },
+                host: {
+                    type: String
+                },
+                loadingMore: {
+                    type: Boolean,
+                    value: false
+                },
+                me: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
+                }
+            },
+
+            _getIconClass: function(rank) {
+                switch (rank) {
+                    case 1:
+                        return 'gold';
+                    case 2:
+                        return 'silver';
+                    case 3:
+                        return 'bronze';
+                    default:
+                        return 'displayNone';
+                }
+            },
+
+            _hideRank: function(rank) {
+                if(rank === 1 || rank === 2 || rank === 3) {
+                    return true;
+                }
+                return false;
+            },
+
+            _getProfileImageUrl: function(imageUrl) {
+                if (!this.host) {
+                    this.host = new Polymer.IronMetaQuery({ key: 'brightspaceUrl'}).value;
+                }
+                return this.host + imageUrl;
+            }
+        });
+	</script>
+</dom-module>
