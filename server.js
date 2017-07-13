@@ -8,7 +8,6 @@ var
     configs = require('./server/configurations'),
     app = express();
 
-app.enable('trust proxy');
 app.use('/', express.static(__dirname + '/dist'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
