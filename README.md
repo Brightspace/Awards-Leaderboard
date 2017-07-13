@@ -4,7 +4,7 @@
 
 This repo represents a demo/sample solution to show what can be done with the Brightspace Awards APIs.
 
-This solution makes use of the classlist awards route, `/d2l/api/bas/1.0/orgunits/{orgUnitId}/classlist/`, to enable the gathering of the users, their awards and their rankings.
+This solution makes use of the classlist awards route, `/d2l/api/bas/1.0/orgunits/{orgUnitId}/classlist/`, to enable the gathering of the users, their awards and their rankings. By using this route we are able to make as few REST calls as possible and get the most data back. This approach may not be the best fit depending on what type of application you are looking to create.
 
 This solution uses Polymer and Brightspace UI components to create the UI.
 
