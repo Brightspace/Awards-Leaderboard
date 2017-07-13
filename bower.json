@@ -1,0 +1,40 @@
+{
+  "name": "awards-leaderboard",
+  "homepage": "https://github.com/Brightspace/awards-leaderboard",
+  "authors": [
+    "D2L Corporation"
+  ],
+  "main": "src/index.html",
+  "keywords": [
+    "custom",
+    "urkund",
+    "admin"
+  ],
+  "license": "Apache License 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "app-elements": "PolymerElements/app-elements#^1.0.0",
+    "d2l-button": "^3.3.0",
+    "d2l-colors": "^2.2.3",
+    "d2l-loading-spinner": "^5.0.4",
+    "d2l-typography": "^5.3.0",
+    "d2l-icons": "^3.1.2",
+    "d2l-button-group": "^0.5.2",
+    "d2l-dropdown": "^5.1.1",
+    "d2l-link": "^3.5.0",
+    "d2l-more-less": "^2.2.2"
+  },
+  "devDependencies": {
+    "bower": "*",
+    "install": "^1.0.4"
+  }
+}

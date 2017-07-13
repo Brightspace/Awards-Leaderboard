@@ -1,0 +1,161 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/d2l-loading-spinner/d2l-loading-spinner.html">
+<link rel="import" href="../../bower_components/d2l-button/d2l-button.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../services/leaderboard-service.html">
+<link rel="import" href="leaderboard-list.html">
+<link rel="import" href="leaderboard-item.html">
+
+<dom-module id="main-app">
+
+	<template>
+		<style>
+            .headerContent {
+                max-width: 1230px;
+                margin: 0 auto;
+            }
+            .content {
+                max-width: 1215px;
+                margin: 0 auto;
+            }
+            .listPadding {
+                margin-bottom: 20px;
+            }
+            .centerDiv {
+                width:100%;
+                text-align: center;
+                margin:20px 0px;
+            }
+            .paper-header {
+                background-color: #00849C;
+                color: white;
+            }
+            .tall .title {
+                display: block;
+            }
+            .title {
+                display: none;
+            }
+            .smallPadding {
+                padding-left: .5rem;
+            }
+		</style>
+
+        <paper-header-panel mode="waterfall-tall">
+            <div class="paper-header">
+                <div class="headerContent">
+                    <h1 class$="[[_getTitleClass(myRanking)]] smallPadding">Awards Leaderboard</h1>
+                    <div hidden$="[[_hideMyRanking(myRanking)]]">
+                        <leaderboard-item item="[[myRanking]]" me="true"></leaderboard-item>
+                    </div>
+                </div>
+            </div>
+            <div class="content fit">
+                <div class="centerDiv">
+                    <template is="dom-if" if="[[loading]]">
+                    <d2l-loading-spinner></d2l-loading-spinner>
+                    </template>
+                </div>
+                <template is="dom-if" if="[[!loading]]">
+                    <leaderboard-list items="[[leaderboardItems]]"></leaderboard-list>
+                </template>
+                <div class="centerDiv">
+                    <template is="dom-if" if="[[_showNextButton(nextUrl, loadingNext)]]">
+                        <button is="d2l-button" on-tap="_loadMoreItems" primary>Load More</button>
+                    </template>
+                    <template is="dom-if" if="[[loadingNext]]">
+                        <d2l-loading-spinner></d2l-loading-spinner>
+                    </template>
+                </div>
+            </div>  
+        </paper-header-panel>
+
+        <leaderboard-service id="leaderboardService"></leaderboard-service>
+	</template>
+
+	<script>
+        window.addEventListener('WebComponentsReady', function() {
+            Polymer({
+                is: 'main-app',
+
+                properties: {
+                    leaderboardItems: {
+                        type: Array,
+                        value: function() { return []; },
+                        notify: true
+                    },
+                    myRanking: {
+                        type: Object,
+                        value: function() { return{}; },
+                        notify: true
+                    },
+                    loading: {
+                        type: Boolean,
+                        value: true
+                    },
+                    nextUrl: {
+                        type: String,
+                        value: null
+                    },
+                    loadingNext: {
+                        type: Boolean,
+                        value: false
+                    }
+                },
+
+                listeners: {
+                    'leaderboardRetrieved': '_leaderboardRetrieved',
+                    'myRankingRetrieved' : '_myRankingRetrieved'
+                },
+
+                attached: function() {
+                    this.$.leaderboardService.getMyRanking();
+                },
+
+                _showNextButton: function(nextUrl, loadingNext) {
+                    if (!nextUrl) {
+                        return false;
+                    }
+                    return !loadingNext;
+                },
+
+                _loadMoreItems: function () {
+                    this.loadingNext = true;
+                    this.$.leaderboardService.getLeaderboard(null, this.nextUrl);
+                },
+
+                _leaderboardRetrieved: function(event) {
+                    if (event.detail.results) {
+                        for (var i = 0; i < event.detail.results.length; i++) {
+                            if (event.detail.results[i].UserId == this.myRanking.UserId) {
+                                continue;
+                            }
+                            this.push('leaderboardItems', event.detail.results[i]);
+                        }
+                    }
+                    this.loading = false;
+                    this.loadingNext = false;
+                    this.nextUrl = event.detail.next;
+                },
+
+                _myRankingRetrieved: function(event) {
+                    this.myRanking = event.detail.ranking;
+                    this.$.leaderboardService.getLeaderboard();
+                },
+
+                _hideMyRanking: function(myRanking) {
+                    if (!myRanking.UserId) {
+                        return true;
+                    }
+                    return false;
+                },
+
+                _getTitleClass: function(myRanking) {
+                    if(!myRanking.UserId) {
+                        return '';
+                    }
+                    return 'title';                }
+            })
+        });
+	</script>
+</dom-module>

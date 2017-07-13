@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html id="html">
+	<head>
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+		<script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+        <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+		<link rel="import" href="../bower_components/d2l-typography/d2l-typography.html">
+        <link rel="import" href="../bower_components/iron-meta/iron-meta.html">
+        <link rel="import" href="./components/main-app.html">
+		<custom-style include="d2l-typography iron-positioning">
+			<style is="custom-style" include="d2l-typography iron-positioning"></style>
+		</custom-style>
+		<title>Awards Leaderboard</title>
+	</head>
+
+	<body class="d2l-typography fullbleed layout vertical">
+        <script>
+            function getQueryStringValue (key) {  
+                var regex = new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i");
+                return decodeURIComponent( window.location.search.replace( regex, "$1"));
+            }
+            var body = document.querySelector('body');
+
+            var host = document.createElement('iron-meta');
+            host.setAttribute('key', 'host');
+            host.setAttribute('value', getQueryStringValue("host"));
+            body.appendChild(host);
+            
+            var brightspaceUrl = document.createElement('iron-meta');
+            brightspaceUrl.setAttribute('key', 'brightspaceUrl');
+            brightspaceUrl.setAttribute('value', getQueryStringValue("brightspaceUrl"));
+            body.appendChild(brightspaceUrl);
+
+            var mainApp = document.createElement('main-app');
+            body.appendChild(mainApp);
+        </script>
+	</body>
+</html>

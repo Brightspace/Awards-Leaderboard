@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="leaderboard-item.html">
+
+<dom-module id="leaderboard-list">
+
+	<template>
+		<style>
+		</style>
+        <template is="dom-repeat" items="[[items]]" as="ranking">
+            <leaderboard-item item="[[ranking]]"></leaderboard-item>
+        </template>
+	</template>
+
+	<script>
+        Polymer({
+            is: 'leaderboard-list',
+
+            properties: {
+                items: {
+                    type: Array,
+                    value: function() { return []; }
+                }
+            }
+        });
+	</script>
+</dom-module>
